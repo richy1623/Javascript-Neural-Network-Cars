@@ -4,16 +4,22 @@ class Car {
     this.ROTATIONSPEED=0.01;
     this.MAXSPEED = 3;
     this.FRICTION = 0.05;
+    this.RAYDISTANCE = height;
 
     this.x = x;
     this.y = y;
-    this.width = width;
-    this.height = height;
+    this.width = width/2;
+    this.height = height/2;
 
     this.acceleration=0;
     this.velocity=0;
 
     this.rotation = 0;
+
+    this.raysRotationList = [];
+    this.rays = [];
+    for(let i=0; i<8;i++)this.raysRotationList.push(i * Math.PI/4);
+    for(let i=0; i<8;i++)this.rays.push(new Ray({x:x, y:y}, {x:x, y:y+1}, this.RAYDISTANCE));
 
     this.controls = new Controls();
   }
@@ -22,12 +28,28 @@ class Car {
     ctx.save()
     ctx.translate(this.x, this.y);
     ctx.rotate(this.rotation);
-    // ctx.fillRect(-this.width / 2,-this.height / 2, this.width, this.height);
+    ctx.fillRect(-this.width / 2,-this.height / 2, this.width, this.height);
     ctx.restore();
+
+    for(const ray of this.rays){
+      ray.draw(ctx);
+    }
   }
 
   update() {
     this.#move();
+    this.#generateRays();
+  }
+
+  #generateRays(){
+    let i=0;
+    for(const ray of this.rays){
+      ray.set(
+        {x:this.x, y:this.y},
+        {x:this.x+this.RAYDISTANCE*Math.sin((this.rotation+this.raysRotationList[i])), y:this.y-this.RAYDISTANCE*Math.cos((this.rotation+this.raysRotationList[i]))}
+      );
+      i++;
+    }
   }
 
   #move(){
@@ -44,5 +66,9 @@ class Car {
 
     this.y += -this.velocity*Math.cos(this.rotation);
     this.x += this.velocity*Math.sin(this.rotation);
+  }
+
+  getRays(){
+    return this.rays;
   }
 }

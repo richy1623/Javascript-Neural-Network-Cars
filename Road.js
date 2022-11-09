@@ -21,6 +21,7 @@ class Road{
 
     this.borders = this.#generateBorders(roadPattern);
     // console.table(this.borders);
+    this.boundries=[];
   }
 
   draw(ctx){
@@ -105,5 +106,14 @@ class Road{
     }
     borders.push([roadPattern[roadPattern.length-1], {x:point.x,y: 0}]);
     return borders;
+  }
+
+  getBoundries(){
+    if (this.boundries.length!=0) return this.boundries;
+    for(let i=0;i<this.borders.length-1;i++){
+      this.boundries.push({p1:{x:this.borders[i][0].x, y:this.borders[i][0].y}, p2:{x:this.borders[i+1][0].x, y:this.borders[i+1][0].y}});
+      this.boundries.push({p1:{x:this.borders[i][1].x, y:this.borders[i][1].y}, p2:{x:this.borders[i+1][1].x, y:this.borders[i+1][1].y}});
+    }
+    return this.boundries;
   }
 }

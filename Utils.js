@@ -78,3 +78,21 @@ function lerpPoints(p1, p2, t) {
     y: (1 - t) * p1.y + t * p2.y
   };
 }
+
+function distanceBetweenPoints(p1, p2){
+  return Math.sqrt(Math.pow(p1.x-p2.x,2)+Math.pow(p1.y-p2.y,2));
+}
+
+/**
+* @param point point in the form {x, y}
+* @param line line in the form {a, b, c} from a line ax+by+c=0
+*/
+function pointOnLine(point, line){
+  if (Math.abs(line.a)==Infinity){
+    return line.c == point.x;
+  }else if (line.a==0){
+    return line.c == point.y;
+  }else{
+    return line.a*point.x + line.b*point.y + line.c ==0;
+  }
+}
