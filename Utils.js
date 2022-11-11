@@ -7,7 +7,8 @@ function lerp(start, stop, t) {
  * @return a line in the form ax+by+c=0
  */
 function getLineFromPoints(p1, p2) {
-
+  roundPoint(p1);
+  roundPoint(p2);
   m = (p2.y - p1.y) / (p2.x - p1.x);
   c = (Math.abs(m) == Infinity) ? p1.x : ((m == 0) ? p1.y : p1.y - m * p1.x );
   return {
@@ -50,11 +51,10 @@ function getLineFromLineAndDistance(line, distance) {
 }
 
 function getIntersectionOfLines(l1, l2) {
-
   if (Math.abs(l1.a) == Infinity) {
-    return {x: l1.c, y: (l2.a == 0) ? l2.c : l2.a * l1.c+l2.c};
+    return {x: l1.c, y: l2.a * l1.c+l2.c};
   } else if (Math.abs(l2.a) == Infinity) {
-    return {x: l2.c, y: (l1.a == 0) ? l1.c :  l1.a *l2.c + l1.c};
+    return {x: l2.c, y:  l1.a *l2.c + l1.c};
   } else {
     x = (l2.c - l1.c) / (l1.a - l2.a);
   }
@@ -95,4 +95,35 @@ function pointOnLine(point, line){
   }else{
     return line.a*point.x + line.b*point.y + line.c ==0;
   }
+}
+/**
+* @param point point in the form {x, y}
+* @param bound1  point in the form {x, y}
+* @param bound2  point in the form {x, y}
+*/
+function pointWithinBounds(point, bound1, bound2){
+  let left;
+  let right;
+  let bottom;
+  let top;
+  if (bound1.x<=bound2.x){
+    left = bound1.x;
+    right = bound2.x;
+  }else{
+    left = bound2.x;
+    right = bound1.x;
+  }
+  if (bound1.y<=bound2.y){
+    bottom = bound2.y;
+    top = bound1.y;
+  }else{
+    bottom = bound1.y;
+    top = bound2.y;
+  }
+  return !(point.x<left || point.x>right || point.y>bottom || point.y<top);
+}
+
+function roundPoint(p){
+  p.x = Math.round(p.x*1000)/1000;
+  p.y = Math.round(p.y*1000)/1000;
 }

@@ -14,7 +14,7 @@ class Car {
     this.acceleration=0;
     this.velocity=0;
 
-    this.rotation = 0;
+    this.rotation = Math.PI;
 
     this.raysRotationList = [];
     this.rays = [];

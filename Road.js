@@ -93,7 +93,7 @@ class Road{
     }
     let lineleft = getLineFromPoints(roadPattern[0], roadPattern[1]);
     let lineright = getLineFromLineAndDistance(lineleft, this.width);
-    let point = getIntersectionOfLines({a:0, y:-1, c:roadPattern[0].y}, lineright);
+    let point = getIntersectionOfLines({a:0, b:-1, c:roadPattern[0].y}, lineright);
 
     borders.push([roadPattern[0], point]);
     let lineold = lineright;
