@@ -1,20 +1,30 @@
 class CollisionManager{
-  constructor(car){
+  constructor(){
     this.colliders = [];
-    this.car = car;
   }
 
   addCollider(x){
     this.colliders.push(x);
   }
 
-  checkCollisions(){
-    for(const ray of this.car.getRays()){
+  checkRaycastCollisions(rays){
+    for(const ray of rays){
       for(const collider of this.colliders){
         for(const boundry of collider.getBoundries()){
           ray.checkCollision(boundry.p1, boundry.p2);
         }
       }
     }
+  }
+
+  checkCollision(objectBoundries){
+    for(const objectBoundry of objectBoundries){
+      for(const collider of this.colliders){
+        for(const colliderBoundry of collider.getBoundries()){
+          if (checkCollision(objectBoundry, colliderBoundry)) return true;
+        }
+      }
+    }
+    return false;
   }
 }

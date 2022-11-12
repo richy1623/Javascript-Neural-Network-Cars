@@ -127,3 +127,13 @@ function roundPoint(p){
   p.x = Math.round(p.x*1000)/1000;
   p.y = Math.round(p.y*1000)/1000;
 }
+
+function checkCollision(bound1, bound2){
+  const line1 = getLineFromPoints(bound1.p1, bound1.p2);
+  const line2 = getLineFromPoints(bound2.p1, bound2.p2);
+  if (line1.a==line2.a && line1.c==line2.c){
+    return true;
+  }
+  let point = getIntersectionOfLines(line1, line2);
+  return pointWithinBounds(point, bound1.p1, bound1.p2) && pointWithinBounds(point, bound2.p1, bound2.p2);
+}
