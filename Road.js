@@ -146,4 +146,7 @@ class Road{
     }
     return -1;
   }
+  getLaneWidth(){
+    return this.width/this.lanes;
+  }
 }
