@@ -23,6 +23,9 @@ class Controls {
         case "ArrowDown":
           this.reverse = true;
           break;
+        case "Space":
+          noLoop();
+          break;
       }
     }
     document.onkeyup = (event) => {

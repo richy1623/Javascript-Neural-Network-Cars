@@ -1,5 +1,5 @@
 class Road{
-  constructor(x, canvasWidth, width=1, height, lanes=3, roadPattern=[{x:0,y:0}, {x:0,y:1}]){
+  constructor(x, canvasWidth, width=1, height, lanes=4, roadPattern=[{x:0,y:0}, {x:0,y:1}]){
     this.x=x;
     this.height = height;
     this.width = canvasWidth*width-10;
@@ -76,6 +76,10 @@ class Road{
     return this.left+(n+0.5)*this.width/(this.lanes);
   }
 
+  getLaneCenterPoint(y, lane){
+    return this.getWaypoint(this.getCurrentBorderSegmentZone(y), lane);
+  }
+
   #generateBorders(roadPattern){
     let borders = [];
     let roadPatternRight=[]
@@ -115,5 +119,31 @@ class Road{
       this.boundries.push({p1:{x:this.borders[i][1].x, y:this.borders[i][1].y}, p2:{x:this.borders[i+1][1].x, y:this.borders[i+1][1].y}});
     }
     return this.boundries;
+  }
+
+  getWaypoint(index=0, lane=0){
+    lane = Math.min(lane+0.5, this.lanes-0.5);
+    if (index >= this.borders.length){
+      return undefined;
+    }
+    return lerpPoints(this.borders[index][0], this.borders[index][1], lane/this.lanes);
+  }
+  getCurrentBorderSegment(x, y, error = 2){
+    for(let i=0;i<this.borders.length;i++){
+      if((this.borders[i][0].y-error<=y && this.borders[i][1].y+error>=y) || (this.borders[i][0].y-error>=y && this.borders[i][1].y+error<=y)){
+        if (this.borders[i][0].x-error<=x && this.borders[i][1].x+error>=x){
+          return i;
+        }
+      }
+    }
+    return -1;
+  }
+  getCurrentBorderSegmentZone(y, error=2){
+    for(let i=0;i<this.borders.length-1;i++){
+      if((this.borders[i][0].y+error>=y && this.borders[i+1][0].y-error<=y) || (this.borders[i][1].y+error>=y && this.borders[i+1][1].y-error<=y)){
+          return i;
+      }
+    }
+    return -1;
   }
 }

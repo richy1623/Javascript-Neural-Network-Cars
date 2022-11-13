@@ -137,3 +137,7 @@ function checkCollision(bound1, bound2){
   let point = getIntersectionOfLines(line1, line2);
   return pointWithinBounds(point, bound1.p1, bound1.p2) && pointWithinBounds(point, bound2.p1, bound2.p2);
 }
+
+function clamp(x, lower, upper){
+  return x<lower ? lower : x>upper ? upper : x;
+}

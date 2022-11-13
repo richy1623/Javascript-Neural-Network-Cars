@@ -22,7 +22,7 @@ class Ray{
 
   draw(ctx){
     ctx.lineWidth=1;
-    ctx.strokeStyle="black";
+    ctx.strokeStyle="yellow";
     ctx.setLineDash([]);
 
     if (this.collisionPoint == undefined){
@@ -36,7 +36,7 @@ class Ray{
       ctx.lineTo(this.collisionPoint.x, this.collisionPoint.y);
       ctx.stroke();
       ctx.beginPath();
-      ctx.strokeStyle="red";
+      ctx.strokeStyle="black";
       ctx.moveTo(this.collisionPoint.x, this.collisionPoint.y);
       ctx.lineTo(this.end.x, this.end.y);
       ctx.stroke();

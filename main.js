@@ -9,14 +9,39 @@ const road = new Road(0, canvas.width, 0.2, canvas.height, undefined, [{x:0,y:0}
 const collisionManager = new CollisionManager();
 collisionManager.addCollider(road);
 const car = new Car(road.getLaneCenter(),canvas.height*0.95,20,30, collisionManager);
-car.draw(ctx);
+const carObstacles = [];
+
+const numObstacleCars = 5;
+for(let i=0;i<numObstacleCars;i++){
+  const carObstacle = new CarObstacle(0,canvas.height*i/(numObstacleCars),20,30, collisionManager, i%4, road);
+  carObstacles.push(carObstacle);
+  collisionManager.addCollider(carObstacle);
+}
+
+//DEBUGING PAUSE
+let stop = false;
+window.addEventListener('keydown', function (e) {
+var key = e.keyCode;
+if (key === 80)// p key
+{
+    stop=!stop;
+}
+});
 
 animate();
 
 function animate(){
+  if (stop) {
+    requestAnimationFrame(animate);
+    return;
+  }
   canvas.height = window.innerHeight;
   road.draw(ctx);
   car.update();
   car.draw(ctx);
+  for(const carObstacle of carObstacles){
+    carObstacle.draw(ctx);
+    carObstacle.update();
+  }
   requestAnimationFrame(animate);
 }
