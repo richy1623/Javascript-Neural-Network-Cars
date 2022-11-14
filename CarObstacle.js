@@ -1,7 +1,7 @@
 class CarObstacle extends AbstractCar{
   constructor(x, y, width, height, collisionManager, lane, road){
     super(0, y, width, height, collisionManager);
-    const pos = road.getLaneCenterPoint(y, lane)
+    const pos = road.getLaneCenterPoint(y, lane);
     this.x = pos.x;
     this.y = pos.y;
 

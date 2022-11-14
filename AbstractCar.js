@@ -109,4 +109,8 @@ class AbstractCar {
   getBoundries(){
     return this.boundries;
   }
+
+  modifySpeed(modifier){
+    this.MAXSPEED*=modifier;
+  }
 }
