@@ -16,6 +16,8 @@ class CarObstacleSpawner{
 
     this.frame = 10000000;
 
+    this.spawnDelay = 2;
+
     this.spawnBelowPoint = Math.max(road.borders[0][0].y+road.borders[1][0].y, road.borders[0][1].y+road.borders[1][1].y)/2;
     this.spawnBelow = false;
     this.maxSpawns = 3;
@@ -60,7 +62,7 @@ class CarObstacleSpawner{
   }
 
   update(){
-    if(this.frame>165){
+    if(this.frame>165*this.spawnDelay){
       this.frame = 0;
       this.spawnCarObstacle();
     }

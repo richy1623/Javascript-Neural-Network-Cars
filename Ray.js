@@ -4,7 +4,7 @@ class Ray{
     this.origin=origin;
     this.end=end;
     this.length = length;
-    this.collisionRatio = -1;
+    this.collisionRatio = 0;
     this.collisionPoint = undefined;
     this.id = (Ray.count++);
   }
@@ -16,7 +16,7 @@ class Ray{
   set(origin, end){
     this.origin=origin;
     this.end=end;
-    this.collisionRatio = -1;
+    this.collisionRatio = 0;
     this.collisionPoint = undefined;
   }
 

@@ -26,4 +26,12 @@ class Sensor{
     }
     this.collisionManager.checkRaycastCollisions(this.rays);
   }
+
+  getCollisionPoints(){
+    let collisionRatios = [];
+    for(const ray of this.rays){
+      collisionRatios.push(ray.collisionRatio);
+    }
+    return collisionRatios;
+  }
 }

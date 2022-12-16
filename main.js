@@ -13,7 +13,7 @@ collisionManager.addCollider(road);
 
 const carWidth = road.getLaneWidth()*0.8;
 const carHeight = carWidth*1.3;
-const car = new Car(road.getLaneCenter(), canvas.height*0.95, carWidth, carHeight, collisionManager);
+const car = new Car(road.getLaneCenter(), canvas.height*0.95, carWidth, carHeight, collisionManager, false);
 const carObstacleSpawner = new CarObstacleSpawner(carWidth, carHeight, 4, window.innerHeight, canvas.height, road, collisionManager, car);
 
 //DEBUGING PAUSE

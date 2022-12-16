@@ -1,11 +1,15 @@
 class Controls {
-  constructor() {
+  constructor(neuralNetwork=undefined) {
     this.foward = false;
     this.left = false;
     this.right = false;
     this.reverse = false;
 
-    this.#addKeyboardListeners()
+    if(!neuralNetwork){
+      this.#addKeyboardListeners();
+    } else {
+      this.neuralNetwork = neuralNetwork;
+    }
   }
 
   #addKeyboardListeners() {
@@ -44,5 +48,15 @@ class Controls {
           break;
       }
     }
+  }
+
+  aiNavigate(collisionPoints){
+    if (!this.neuralNetwork) return;
+    var output = NeuralNetwork.feedFoward(collisionPoints, this.neuralNetwork);
+
+    this.left = output[0];
+    this.right = output[1];
+    this.foward = output[2];
+    this.reverse = output[3];
   }
 }
