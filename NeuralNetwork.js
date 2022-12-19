@@ -1,14 +1,16 @@
 class NeuralNetwork {
   constructor(neuronCounts){
     this.layers = [];
+    this.inputs = new Array(neuronCounts[0]);
     for (let i=0; i<neuronCounts.length-1; i++){
       this.layers.push(new Layer(neuronCounts[i], neuronCounts[i+1]));
     }
   }
 
   static feedFoward(inputs, neuralNetwork){
+    neuralNetwork.inputs = inputs;
     let outputs = Layer.feedFoward(inputs, neuralNetwork.layers[0]);
-    for (let i=1; i<neuralNetwork.layers; i++){
+    for (let i=1; i<neuralNetwork.layers.length; i++){
       outputs = Layer.feedFoward(outputs, neuralNetwork.layers[i]);
     }
     outputs = Layer.formatOutput(outputs);

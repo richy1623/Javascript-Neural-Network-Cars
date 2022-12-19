@@ -1,5 +1,5 @@
 class Sensor{
-  constructor(collisionManager, rayLength, numRays= 12){
+  constructor(collisionManager, rayLength, numRays=12){
     this.rayLength = rayLength;
     this.collisionManager = collisionManager;
 

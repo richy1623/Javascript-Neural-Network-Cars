@@ -5,16 +5,17 @@ class Car extends AbstractCar{
     //this.color = "grey";
     this.manual = manual;
 
-    var numRays = 12;
+    const numberRays = 10;
 
     if (manual){
       this.controls = new Controls();
     }else{
-      this.neuralNetwork = new NeuralNetwork([numRays+1, 8, 8, 4]);
+      this.neuralNetwork = new NeuralNetwork([numberRays+1, 8, 8, 4]);
+        // this.neuralNetwork = new NeuralNetwork([2, 3, 4, 5]);
       this.controls = new Controls(this.neuralNetwork);
     }
 
-    this.sensor = new Sensor(collisionManager, this.height*2.5, 12, numRays=numRays);
+    this.sensor = new Sensor(collisionManager, this.height*3, numberRays);
   }
 
   update(){

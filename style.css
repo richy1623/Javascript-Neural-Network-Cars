@@ -5,6 +5,9 @@ body{
   text-align: center;
 }
 
-#canvas{
+#roadCanvas{
   background: lightgrey;
+}
+#networkCanvas{
+  background: #353535;
 }
