@@ -1,13 +1,13 @@
 class Road{
-  constructor(x, canvasWidth, width=1, height, lanes=4, roadPattern=[{x:0,y:0}, {x:0,y:1}]){
+  constructor(x, canvasWidth, width=1, height, scale, zoom, lanes=4, roadPattern=[{x:0,y:0}, {x:0,y:1}]){
     this.x=x;
     this.height = height;
-    this.width = canvasWidth*width-10;
+    this.width = canvasWidth*width/scale-10;
     this.lanes = lanes>0 ? lanes : 1;
     //  this.canvasWidth = canvasWidth;
 
     this.left = x+5;
-    this.right = this.left + canvasWidth;
+    this.right = this.left + canvasWidth/scale;
     this.top = 0;
     this.bottom = height;
 
@@ -22,6 +22,8 @@ class Road{
     this.borders = this.#generateBorders(roadPattern);
     // console.table(this.borders);
     this.boundries=[];
+
+    this.lineDash = [Math.floor(20/scale*zoom), Math.floor(20/scale*zoom)];
   }
 
   draw(ctx){
@@ -41,7 +43,7 @@ class Road{
       ctx.stroke();
     }
 
-    ctx.setLineDash([20,20]);
+    ctx.setLineDash(this.lineDash);
     let startpoints = [];
     let endpoints = [];
     for(let i=1;i<this.lanes;i++){

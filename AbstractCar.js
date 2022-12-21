@@ -42,16 +42,16 @@ class AbstractCar {
     ctx.fill();
   }
 
-  update() {
+  update(deltatime) {
     //if (this.crashed) return;
-    this.move();
+    this.move(deltatime);
     this.#generateBoundries();
     this.crashed = this.crashed || this.collisionManager.checkCollision(this.getBoundries());
   }
 
 
 
-  move(){
+  move(deltatime){
     if (!this.controls) {
       console.log("ERROR");
       return;
@@ -65,12 +65,12 @@ class AbstractCar {
     if (Math.abs(this.velocity)<this.FRICTION)this.velocity=0;
 
     //Left-Right movement
-    this.rotation+= this.controls.right ? this.ROTATIONSPEED : (this.controls.left ? -this.ROTATIONSPEED : 0);
+    this.rotation+= this.controls.right ? this.ROTATIONSPEED*deltatime : (this.controls.left ? -this.ROTATIONSPEED*deltatime : 0);
     if(this.rotation<0)this.rotation+=Math.PI*2;
     else if(this.rotation>Math.PI*2)this.rotation-=Math.PI*2;
 
-    this.y += -this.velocity*Math.cos(this.rotation);
-    this.x += this.velocity*Math.sin(this.rotation);
+    this.y += -this.velocity*Math.cos(this.rotation)*deltatime;
+    this.x += this.velocity*Math.sin(this.rotation)*deltatime;
     // console.table(this.controls);
   }
 

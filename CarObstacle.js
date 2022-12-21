@@ -11,10 +11,12 @@ class CarObstacle extends AbstractCar{
     this.road = road;
 
     this.controls = new AIControls({x:this.x, y:this.y}, lane, this.MAXSPEED, road);
+    this.end = false;
   }
 
-  update(){
-    super.update();
+  update(deltatime){
+    if(this.end) return;
+    super.update(deltatime);
     // console.log(this.x, this.y);
     this.controls.update(this.x, this.y, this.rotation);
     if(this.controls.setPoint){
@@ -28,16 +30,22 @@ class CarObstacle extends AbstractCar{
         this.controls.turning = true;
       }
     }
-
+    if (this.y<=1){
+        this.endLife();
+    }
   }
 
-  move(){
-    super.move();
+  endLife(){
+    if(!this.end) this.end = this.collisionManager.removeCollider(this);
+  }
+
+  move(deltatime){
+    super.move(deltatime);
     if (this.controls.reverse) this.velocity = 0;
   }
 
   draw(ctx){
-    if(this.controls.endRoute) return;
+    if(this.controls.endRoute || this.end) return;
     super.draw(ctx);
     this.controls.draw(ctx);
   }

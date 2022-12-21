@@ -7,7 +7,7 @@ class NeuralNetworkVisualiser{
   }
 
   setNeuralNetwork(neuralNetwork){
-    this.neuralNetwork = neuralNetwork.layers;
+    this.neuralNetwork = neuralNetwork;
   }
 
   draw(ctx){
@@ -47,6 +47,7 @@ class NeuralNetworkVisualiser{
       12, 0, 2*Math.PI);
     ctx.stroke();
     ctx.fillStyle=this.#getNodeRGB(value);
+    if (layernumber==0) ctx.fillStyle = value==1 ? "rgb(255,255,0)" : "rgb(0,0,0)";
     ctx.beginPath();
     ctx.arc(lerp(this.margin, this.width-this.margin, (i+0.5)/layerLength),
       lerp(this.margin, this.height-this.margin, layernumber/numOfLayers),

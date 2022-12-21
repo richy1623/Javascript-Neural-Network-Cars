@@ -26,13 +26,15 @@ class CarObstacleSpawner{
 
   addCarObstacle(y=Math.floor(this.canvasHeight*Math.random()), lane=Math.floor(this.lanes*Math.random())){
     // console.log(y, this.canvasHeight);
+    if(collisionManager.colliders.length>15) return;
     const carObstacle = new CarObstacle(0,y,this.carWidth,this.carHeight, collisionManager, lane%4, road);
     this.carObstacles.push(carObstacle);
-    carObstacle.modifySpeed(lerp(0.5,2,lane/this.lanes));
+    carObstacle.modifySpeed(lerp(0.5,1.8,lane/this.lanes));
     this.collisionManager.addCollider(carObstacle);
   }
 
   spawnCarObstacle(){
+    return;
     if(Math.random()<0.2) return;
     if(this.maxSpawns>0){
       if(!this.skipSpawn){
@@ -61,7 +63,7 @@ class CarObstacleSpawner{
     }
   }
 
-  update(){
+  update(deltatime){
     if(this.frame>165*this.spawnDelay){
       this.frame = 0;
       this.spawnCarObstacle();
@@ -69,13 +71,26 @@ class CarObstacleSpawner{
     this.frame++;
 
     for(const carObstacle of this.carObstacles){
-      carObstacle.update();
+      carObstacle.update(deltatime);
     }
+    this.carObstacles = this.carObstacles.filter(carObstacle => !carObstacle.end);
   }
 
   draw(ctx){
     for(const carObstacle of this.carObstacles){
       carObstacle.draw(ctx);
+    }
+  }
+
+  filter(car){
+    for(const carObstacle of this.carObstacles){
+      if(carObstacle.y<car.y-this.screenHeight/2 && carObstacle.MAXSPEED>=car.MAXSPEED){
+        carObstacle.endLife();
+      }else{
+        if(carObstacle.y>car.y+this.screenHeight/5 && carObstacle.MAXSPEED<=car.MAXSPEED){
+          carObstacle.endLife();
+        }
+      }
     }
   }
 }

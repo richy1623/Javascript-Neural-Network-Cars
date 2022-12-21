@@ -1,6 +1,10 @@
 //Road Canvas
 const roadCanvas=document.getElementById("roadCanvas");
-roadCanvas.height=window.innerHeight*5;
+
+let zoom = 1;
+const scale = 5;
+zoom *= scale;
+roadCanvas.height=window.innerHeight*zoom;
 roadCanvas.width=500;
 
 //NeuralNetwork Visualiser canvas
@@ -12,19 +16,26 @@ const ctx = roadCanvas.getContext("2d");
 const ctxNetwork = networkCanvas.getContext("2d");
 
 const numLanes = 4;
-//const road = new Road(0, canvas.width, 0.5, canvas.height, undefined, [{x:0,y:0}, {x:0, y:0.2}, {x:0.5, y:0.8}, {x:0.5, y:1}]);
-const road = new Road(0, roadCanvas.width, 0.2, roadCanvas.height, numLanes, [{x:0,y:0}, {x:0, y:0.2}, {x:0.6, y:0.28}, {x:0.8, y:0.5}, {x:0.6, y:1-0.28}, {x:0, y:0.80}, {x:0, y:1}]);
+// const road = new Road(0, roadCanvas.width, 0.5, roadCanvas.height, numLanes, [{x:0,y:0}, {x:0, y:0.2}, {x:0.5, y:0.8}, {x:0.5, y:1}]);
+const road = new Road(0, roadCanvas.width*zoom, 0.2, roadCanvas.height, scale, zoom, numLanes, [{x:0,y:0}, {x:0, y:0.2}, {x:0.6, y:0.28}, {x:0.8, y:0.5}, {x:0.6, y:1-0.28}, {x:0, y:0.80}, {x:0, y:1}]);
 // const road = new Road(0, canvas.width, 1, canvas.height, undefined);
 const collisionManager = new CollisionManager();
 collisionManager.addCollider(road);
 
-const carWidth = road.getLaneWidth()*0.8;
-const carHeight = carWidth*1.3;
-const car = new Car(road.getLaneCenter(), roadCanvas.height*0.95, carWidth, carHeight, collisionManager, false);
-const carObstacleSpawner = new CarObstacleSpawner(carWidth, carHeight, 4, window.innerHeight, roadCanvas.height, road, collisionManager, car);
 
 //NeuralNetworkVisualiser object
-const neuralNetworkVisualiser = new NeuralNetworkVisualiser(car.neuralNetwork, networkCanvas.width, networkCanvas.height);
+const neuralNetworkVisualiser = new NeuralNetworkVisualiser(null, networkCanvas.width, networkCanvas.height);
+
+const carWidth = road.getLaneWidth()*0.75;
+const carHeight = carWidth*1.3;
+
+const numCars = 500;
+const numGhosts = 100;
+
+let carManager = new CarManager(numCars, numGhosts, road.getLaneCenter(), road.bottom*0.95, carWidth, carHeight, collisionManager, neuralNetworkVisualiser);
+
+const carObstacleSpawner = new CarObstacleSpawner(carWidth, carHeight, 4, window.innerHeight, roadCanvas.height, road, collisionManager, carManager.bestCar);
+
 
 //DEBUGING PAUSE
 let stop = false;
@@ -45,12 +56,15 @@ function animate(){
   }
   roadCanvas.height = window.innerHeight;
   networkCanvas.height = window.innerHeight;
-  ctx.transform(1,0,0,1,0,-car.y+roadCanvas.height*0.8);
+  // if(zoom>1) ctx.transform(1,0,0,1,-carManager.bestCar.x+roadCanvas.width/2,0);
+  if(zoom>1) ctx.transform(1,0,0,1,-carManager.bestCar.x+roadCanvas.width/2,-carManager.bestCar.y+roadCanvas.height*0.8);
   road.draw(ctx);
-  carObstacleSpawner.update();
+  carObstacleSpawner.update(1);
   carObstacleSpawner.draw(ctx);
-  car.update();
-  car.draw(ctx);
+
+  carManager.update(1);
+  carManager.draw(ctx);
+
   neuralNetworkVisualiser.draw(ctxNetwork);
   requestAnimationFrame(animate);
 }

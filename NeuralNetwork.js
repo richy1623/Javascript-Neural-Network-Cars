@@ -1,9 +1,10 @@
 class NeuralNetwork {
-  constructor(neuronCounts){
+  constructor(neuronCounts, randomise=true){
+    this.neuronCounts = neuronCounts;
     this.layers = [];
     this.inputs = new Array(neuronCounts[0]);
     for (let i=0; i<neuronCounts.length-1; i++){
-      this.layers.push(new Layer(neuronCounts[i], neuronCounts[i+1]));
+      this.layers.push(new Layer(neuronCounts[i], neuronCounts[i+1], randomise));
     }
   }
 
@@ -16,10 +17,18 @@ class NeuralNetwork {
     outputs = Layer.formatOutput(outputs);
     return outputs;
   }
+
+  static mutate(neuralNetworkBase, variation=0.1){
+    let neuralNetwork = new NeuralNetwork(neuralNetworkBase.neuronCounts, false);
+    for(let i=0; i<neuralNetwork.layers.length; i++){
+      Layer.mutate(neuralNetworkBase.layers[i], neuralNetwork.layers[i], variation);
+    }
+    return neuralNetwork;
+  }
 }
 
 class Layer {
-  constructor(numInputs, numOutputs) {
+  constructor(numInputs, numOutputs, randomise=true) {
     this.outputs = new Array(numOutputs);
 
     this.weights = [];
@@ -29,7 +38,7 @@ class Layer {
 
     this.biases = new Array(numOutputs);
 
-    Layer.#randomise(this);
+    if(randomise) Layer.#randomise(this);
   }
 
   static #randomise(layer) {
@@ -39,7 +48,7 @@ class Layer {
       }
     }
     for (let i = 0; i < layer.biases.length; i++) {
-      layer.biases[i] = Math.random() * 0.5;
+      layer.biases[i] = Math.random();
     }
   }
 
@@ -63,6 +72,17 @@ class Layer {
       }
     }
     return outputs;
+  }
+
+  static mutate(baseLayer, layer, variation){
+    for (let i = 0; i < layer.weights.length; i++) {
+      for (let j = 0; j < layer.weights[i].length; j++) {
+        layer.weights[i][j] = baseLayer.weights[i][j] + Math.random()*variation-variation/2;
+      }
+    }
+    for (let i = 0; i < layer.biases.length; i++) {
+      layer.biases[i] = baseLayer.biases[i] + Math.random()*2*variation-variation;
+    }
   }
 
 }

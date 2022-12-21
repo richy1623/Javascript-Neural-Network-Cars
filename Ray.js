@@ -44,6 +44,32 @@ class Ray{
   }
 
   checkCollision(p1, p2){
+    if (this.origin.x>=this.end.x){
+      if (p1.x>=p2.x){
+        if (this.end.x>p1.x) return false;
+      }else{
+        if (this.end.x>p2.x) return false;
+      }
+    }else{
+      if (p1.x>=p2.x){
+        if (this.origin.x>p1.x) return false;
+      }else{
+        if (this.origin.x>p2.x) return false;
+      }
+    }
+    if (this.origin.y>=this.end.y){
+      if (p1.y>=p2.y){
+        if (this.end.y>p1.y) return false;
+      }else{
+        if (this.end.y>p2.y) return false;
+      }
+    }else{
+      if (p1.y>=p2.y){
+        if (this.origin.y>p1.y) return false;
+      }else{
+        if (this.origin.y>p2.y) return false;
+      }
+    }
     const line1 = getLineFromPoints(this.origin, this.end);
     const line2 = getLineFromPoints(p1, p2);
     if (line1.a==line2.a && line1.c==line2.c){
