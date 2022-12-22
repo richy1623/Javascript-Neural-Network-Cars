@@ -29,8 +29,8 @@ const neuralNetworkVisualiser = new NeuralNetworkVisualiser(null, networkCanvas.
 const carWidth = road.getLaneWidth()*0.75;
 const carHeight = carWidth*1.3;
 
-const numCars = 500;
-const numGhosts = 100;
+const numCars = 100;
+const numGhosts = 20;
 
 let carManager = new CarManager(numCars, numGhosts, road.getLaneCenter(), road.bottom*0.95, carWidth, carHeight, collisionManager, neuralNetworkVisualiser);
 
